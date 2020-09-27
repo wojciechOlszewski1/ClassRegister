@@ -5,8 +5,9 @@ using System.Text;
 
 namespace ClassRegister.Repository.Repositories
 {
-    interface IStudentRepository
+    public interface IStudentRepository
     {
+        Student GetById(int id);
         IEnumerable<Student> GetStudents();
     }
 }

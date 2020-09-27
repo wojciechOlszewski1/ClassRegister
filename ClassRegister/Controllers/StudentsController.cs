@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClassRegister.Dtos;
 using ClassRegister.Repository.Contexts;
 using ClassRegister.Repository.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -14,9 +15,9 @@ namespace ClassRegister.Controllers
     public class StudentsController : ControllerBase
     {
         private IStudentRepository _studentReposiotry;
-        public StudentsController(ClassRegisterContext classRegisterContext)
+        public StudentsController(IStudentRepository studentRepository)
         {
-            _studentReposiotry = new StudentReposiotry(classRegisterContext);
+            _studentReposiotry = studentRepository;
         }
 
         [HttpGet]
@@ -28,7 +29,22 @@ namespace ClassRegister.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            return Ok(_studentReposiotry.GetStudents());
+            var student = _studentReposiotry.GetById(id);
+
+            var studentDto = new StudentDto();
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(student);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] StudentDto student)
+        {
+
+            return Ok(student);
         }
     }
 }
